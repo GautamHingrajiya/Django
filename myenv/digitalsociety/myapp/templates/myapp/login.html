@@ -17,7 +17,7 @@
     </head>
     
     <body class="theme-cyan authentication sidebar-collapse">
-
+ 
         <nav class="navbar navbar-expand-lg fixed-top navbar-transparent">
             <div class="container">        
                 <div class="navbar-translate n_logo">
@@ -33,33 +33,39 @@
         </nav>
 
         <div class="page-header">
-        <div class="page-header-image" style="background-image:url('../assets/images/login.jpg')"></div>
+        <div class="page-header-image" style="background-image:url('myapp/assets/images/login.jpg')"></div>
         <div class="container">
         <div class="col-md-12 content-center">
             <div class="card-plain">
-                <form class="form" method="" action="">
+                <form class="form" method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
                     <div class="header">
                         <div class="logo-container">
-                            <img src="..\assets\images\logo.svg" alt="">
+                            <img src="{% static 'myapp\assets\images\logo.svg' %}" alt="">
                         </div>
                         <h5>Log in</h5>
                     </div>
+                    {% if e_msg %}
+                    <div class="alert alert-danger" role="alert">
+                        {{e_msg}}
+                    </div>
+                    {% endif %}
 
                     <div class="content">                                                
-                        <div class="input-group input-lg">
-                            <input type="text" class="form-control" placeholder="Enter User Name">
+                        <div class="input-group input-lg"> 
+                            <input type="text" class="form-control" placeholder="Enter User Name" name="email">
                             <span class="input-group-addon">
                                 <i class="zmdi zmdi-account-circle"></i>
                             </span>
                     </div>
                     <div class="input-group input-lg">
-                            <input type="password" placeholder="Password" class="form-control">
+                            <input type="password" placeholder="Password" class="form-control" name="password">
                             <span class="input-group-addon">
                                 <i class="zmdi zmdi-lock"></i>
                             </span>
                     </div>
                     <div class="footer text-center">
-                        <a href="..\dashboard\index.html" class="btn btn-primary btn-round btn-lg btn-block ">SIGN IN</a>
+                        <input type="submit" class="btn btn-primary btn-round btn-lg btn-block " value="SIGN IN">
                         <h5><a href="forgot-password.html" class="link">Forgot Password?</a></h5>
                     </div>
                 </form>
