@@ -11,19 +11,33 @@ def home(request):
         return render(request,"myapp/login.html")
 
 def login(request):
-    
-    if request.POST:
 
+    if "email" in request.session:
+        uid = User.objects.get(email = request.session['email'])
+        if uid.role == "Chairman":
+            cid = Chairman.objects.get(user_id = uid)
+            context={
+                'uid': uid,
+                'cid' : cid
+            }
+            return render(request,"myapp/index.html",context)
+        else:
+            pass
+    
+    elif request.POST:
         p_email = request.POST['email']
         p_password = request.POST['password']
-
         try:
             uid = User.objects.get(email = p_email)
             if uid.password == p_password:
                 if uid.role == "Chairman":
                     cid = Chairman.objects.get(user_id = uid)
                     request.session['email'] = uid.email
-                    return render(request,"myapp/index.html")
+                    context={
+                        'uid': uid,
+                        'cid' : cid
+                    }
+                    return render(request,"myapp/index.html",context)
                 else:
                     pass
             else:
@@ -36,9 +50,16 @@ def login(request):
                     'e_msg':'Invalid Email'
                 }
                 return render(request,"myapp/login.html",context)
-            
     else:
 
         print("<<<<<<<<<<================= Only Referes ================== ")
-    
+
     return render(request,"myapp/login.html")
+
+def logout(request):
+
+    if "email" in request.session:
+        del request.session['email']
+        return render(request,"myapp/login.html")
+    else:
+        return render(request,"myapp/login.html")
